@@ -24,6 +24,7 @@ public class Consumer3 implements MessageListener {
 		try {
 			String message = GSON.toJson(msg);
 			System.out.print("consumer receive message ---> " + new String(msg.getBody(), "UTF-8"));
+			System.out.print("consumer receive message success --->" + message);
 			LOGGER.info("consumer receive message success ---> {}", message);
 		} catch (Exception e) {
 			LOGGER.error("consumer receive message fail ---> {}", e.getMessage());

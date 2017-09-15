@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.github.core.Producer;
+import com.github.core.Result;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath*:spring-context.xml" })
@@ -18,6 +19,10 @@ public class ProducerTest {
 
 	@Test
 	public void testSendMsgToQueue() {
-		producer.sendMsgByQueueKey(QUEUE_KEY, "hello, rabbmitmq!");
+		Result result = new Result();
+		result.setDesc("hello, rabbmitmq!");
+		result.setSuccess(true);
+		// producer.sendMsgByQueueKey(QUEUE_KEY, "hello, rabbmitmq!");
+		producer.sendMsgByQueueKey(QUEUE_KEY, result);
 	}
 }
