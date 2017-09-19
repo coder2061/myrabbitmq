@@ -30,7 +30,12 @@
 	<!-- declared-by:指定管理员，从而连接到相应的connectionFactory； -->
 
 	<!-- 声明消息队列 -->
-	<rabbit:queue id="queue1" name="queue1" durable="true" auto-delete="false" exclusive="false" declared-by="admin1" />
+	<rabbit:queue id="queue1" name="queue1" durable="true" auto-declare="true" auto-delete="false" exclusive="false" declared-by="admin1">
+		<rabbit:queue-arguments>
+			<!-- 设置队列优先级；优先级值最好是 Integer 类型 -->
+			<entry key="x-max-priority" value="1" value-type="java.lang.Integer" />
+		</rabbit:queue-arguments>
+	</rabbit:queue>
 
 	<!-- 声明 direct 类型 exchange，即消息与一个特定的路由键完全匹配，才会转发 -->
 	<rabbit:direct-exchange id="directExchange" name="directExchange" durable="true" auto-delete="false" declared-by="admin1">

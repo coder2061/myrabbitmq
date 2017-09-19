@@ -4,7 +4,10 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.stereotype.Service;
 
 @Service("producer")
@@ -21,7 +24,16 @@ public class ProducerImpl implements Producer {
 	public void sendMsgByQueueKey(String queueKey, Object object) {
 		try {
 			// convertAndSend：将Java对象转换为消息发送到匹配Key的交换机中Exchange，由于配置了JSON转换，这里是将Java对象转换成JSON字符串的形式。
-			amqpTemplate.convertAndSend(queueKey, object);
+//			amqpTemplate.convertAndSend(queueKey, object);
+			// 设置消息优先级
+			MessagePostProcessor messagePostProcessor = new MessagePostProcessor() {
+				@Override
+				public Message postProcessMessage(Message message) throws AmqpException {
+					message.getMessageProperties().setPriority(1);
+					return message;
+				}
+			};
+			amqpTemplate.convertAndSend(queueKey, object, messagePostProcessor);
 		} catch (Exception e) {
 			LOGGER.error("producer send message fail by queue_key ---> {}", e.getMessage());
 		}

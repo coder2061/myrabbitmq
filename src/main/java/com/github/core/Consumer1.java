@@ -23,8 +23,10 @@ public class Consumer1 implements MessageListener {
 	public void onMessage(Message msg) {
 		try {
 			String message = GSON.toJson(msg);
-			System.out.print("consumer receive message ---> " + new String(msg.getBody(), "UTF-8"));
-			LOGGER.info("consumer receive message success ---> {}", message);
+			Integer priority = msg.getMessageProperties().getPriority();
+			System.out.println("consumer receive message ---> msg:" + new String(msg.getBody(), "UTF-8")
+					+ ",priority:" + priority);
+			LOGGER.info("consumer receive message success ---> msg:{}, priority:", message, priority);
 		} catch (Exception e) {
 			LOGGER.error("consumer receive message fail ---> {}", e.getMessage());
 		}
